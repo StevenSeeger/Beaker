@@ -6,7 +6,7 @@ from PIL import Image
 import pyocr
 import pyocr.builders
 
-img = IM.scan('test.png')
+img = IM.scan('./test_pictures/test.png')
 
 # skip scan and look at monochrome
 # img.convert('L')
@@ -22,7 +22,7 @@ img = IM.scan('test.png')
 
 # Best to worst results
 
-text = pytesseract.image_to_string(Image.open('test.png'))
+text = pytesseract.image_to_string(Image.open('./test_pictures/test.png'))
 text = text.split("\n")
 for line in text:
     if "$" in line:
@@ -36,7 +36,7 @@ if len(tools) == 0:
 tool = tools[0]
 print("Will use tool '%s'" % (tool.get_name()))
 txt = tool.image_to_string(
-    Image.open('test.png'),
+    Image.open('./test_pictures/test.png'),
     lang='eng',
     builder=pyocr.builders.TextBuilder()
 )
