@@ -15,8 +15,8 @@ def black_white(img):
     return imgf
 
 def fix_skew(img):
-    wd, ht = imgf.size
-    pix = np.array(imgf.convert('1').getdata(), np.uint8)
+    wd, ht = img.size
+    pix = np.array(img.convert('1').getdata(), np.uint8)
     bin_img = 1 - (pix.reshape((ht, wd)) / 255.0)
     
     def find_score(arr, angle):
@@ -52,7 +52,13 @@ def thin_skeleton(img):
 
 def segemtation(img):
     #Vertical segmenation
-    proj = np.sum(np.sum(erosion,2),1)
+    proj = np.sum(np.sum(img,2),1)
+    im = np.sum(img,2)
+    m = np.max(proj)
+    w = 500
+    result = np.zeros((proj.shape[0],500))
+    for row in range(im.shape[0]):
+       cv2.line(result, (0,row), (int(proj[row]*w/m),row), (255,255,255), 1)
     blank = np.where(np.sum(result,1)-255 == 0)[0]
     img_text = []
     for i, val in enumerate(blank):
@@ -63,10 +69,11 @@ def segemtation(img):
         else:
             continue
     
+    H,W = img.shape[:2]
     # split up picture by line
     img_list = []
     for vals in img_text:
-        img_list.append(erosion[vals[0]:vals[1], 0:W])
+        img_list.append(img[vals[0]:vals[1], 0:W])
 
     # get pixels of characters
     line_chars = []
