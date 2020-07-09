@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from scipy.ndimage import interpolation as inter
 
 def load_image(path):
-    img = cv2.imread(path)
+    # img = cv2.imread(path)
+    img = cv2.imdecode(np.fromstring(path.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     return img
 
 def black_white(img):
@@ -50,7 +51,7 @@ def thin_skeleton(img):
     img = cv2.erode(img,kernel,iterations = 1)
     return img
 
-def segemtation(img):
+def segmentation(img):
     #Vertical segmenation
     proj = np.sum(np.sum(img,2),1)
     im = np.sum(img,2)
